@@ -13,7 +13,7 @@ import com.whensunset.sticker.DecorationElement;
 public class TestElement extends DecorationElement {
   private ImageView mTestImageView;
   public TestElement(float originWidth, float originHeight) {
-    super(ElementType.NORMAL_STICKER, originWidth, originHeight);
+    super(originWidth, originHeight);
   }
   
   @Override

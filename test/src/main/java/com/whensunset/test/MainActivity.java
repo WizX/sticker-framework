@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.Button;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.whensunset.sticker.AnimationElement;
-import com.whensunset.sticker.DecorationElementContainerView;
 import com.whensunset.sticker.DecorationView;
 
 public class MainActivity extends Activity{
-  private DecorationElementContainerView mElementContainerView;
+  private MyTikTokElementContainerView mElementContainerView;
   
   @SuppressLint("ShowToast")
   @Override
@@ -19,6 +19,7 @@ public class MainActivity extends Activity{
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.activity_main);
+    Fresco.initialize(this);
     DecorationView.initDecorationView(getResources(), getApplicationContext(), R.drawable.edit_btn_delete, R.drawable.edit_btn_scale);
     mElementContainerView = findViewById(R.id.element_container_view);
     mElementContainerView.setNeedAutoUnSelect(false);
@@ -32,9 +33,13 @@ public class MainActivity extends Activity{
 
     Button addMulputElement = findViewById(R.id.add_mul_put_element);
     addMulputElement.setOnClickListener(v -> {
-      MulInputElement normalStickerElementDrawer = new MulInputElement();
+//      MulInputElement normalStickerElementDrawer = new MulInputElement();
+//      mElementContainerView.unSelectElement();
+//      mElementContainerView.addSelectAndUpdateElement(normalStickerElementDrawer);
+      StaticStickerElement staticStickerElement = StaticStickerElement.getStaticStickerElementByUri(
+          500, 500, "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2335883016,884179302&fm=200&gp=0.jpg");
       mElementContainerView.unSelectElement();
-      mElementContainerView.addSelectAndUpdateElement(normalStickerElementDrawer);
+      mElementContainerView.addSelectAndUpdateElement(staticStickerElement);
     });
     
     Button startAnimation = findViewById(R.id.start_animation);

@@ -73,7 +73,7 @@ public class ElementContainerView extends AbsoluteLayout {
       @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
       @Override
       public void onGlobalLayout() {
-        mEditorRect.set(0, 0, getWidth(), getHeight());
+        viewLayoutComplete();
         if (getWidth() != 0 && getHeight() != 0) {
           getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
@@ -82,6 +82,13 @@ public class ElementContainerView extends AbsoluteLayout {
     });
     
     addDetector();
+  }
+  
+  /**
+   * view layout 完成 width 和 height 都有了，这个时候可以做一些初始化的事情
+   */
+  protected void viewLayoutComplete() {
+    mEditorRect.set(0, 0, getWidth(), getHeight());
   }
   
   // --------------------------------------- 手势操作开始 ---------------------------------------
@@ -102,6 +109,7 @@ public class ElementContainerView extends AbsoluteLayout {
       
       @Override
       public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.d(TAG, "onFling |||||||||| e1:" + e1 + ",e2:" + e2 + ",velocityX:" + velocityX + ",velocityY:" + velocityY);
         return ElementContainerView.this.onFling(e1, e2, velocityX, velocityY);
       }
       
@@ -111,8 +119,9 @@ public class ElementContainerView extends AbsoluteLayout {
         if (mIsInDoubleFinger) {
           return false;
         }
-        
-        boolean result = scrollSelectTapOtherAction(e2, distanceX, distanceY);
+       
+        float[] distance = new float[]{distanceX, distanceY};
+        boolean result = scrollSelectTapOtherAction(e2, distance);
         if (result) {
           return true;
         }
@@ -120,7 +129,7 @@ public class ElementContainerView extends AbsoluteLayout {
         if (mMode == BaseActionMode.SELECTED_CLICK_OR_MOVE
             || mMode == BaseActionMode.SELECT
             || mMode == BaseActionMode.MOVE) {
-          return singleFingerMove(distanceX, distanceY);
+          return singleFingerMove(distance[0], distance[1]);
         }
         return false;
       }
@@ -393,7 +402,6 @@ public class ElementContainerView extends AbsoluteLayout {
   }
   
   protected boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-    Log.d(TAG, "onFling |||||||||| e1:" + e1 + ",e2:" + e2 + ",velocityX:" + velocityX + ",velocityY:" + velocityY);
     return true;
   }
   
@@ -415,11 +423,12 @@ public class ElementContainerView extends AbsoluteLayout {
   
   /**
    * 滑动已经选中的元素，如果子类中有操作的话可以给它，优先级最高
-   *
+   * @param event 当前的触摸事件
+   * @param distance size 为 2，里面分别为 x 轴的 delta 位移，和 y 轴的 delta 位移
    * @return
    */
-  protected boolean scrollSelectTapOtherAction(@NonNull MotionEvent event, float distanceX, float distanceY) {
-    Log.d(TAG, "scrollSelectTapOtherAction |||||||||| event:" + event + ",distanceX:" + distanceX + ",distanceY:" + distanceY);
+  protected boolean scrollSelectTapOtherAction(@NonNull MotionEvent event, float[] distance) {
+    Log.d(TAG, "scrollSelectTapOtherAction |||||||||| event:" + event + ",distanceX:" + distance[0] + ",distanceY:" + distance[1]);
     return false;
   }
   
@@ -882,7 +891,7 @@ public class ElementContainerView extends AbsoluteLayout {
     }
   }
   
-  interface Consumer<T> {
+  public interface Consumer<T> {
     
     void accept(T t);
   }

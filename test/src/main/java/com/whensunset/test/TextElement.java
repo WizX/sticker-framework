@@ -1,6 +1,5 @@
 package com.whensunset.test;
 
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 
@@ -11,11 +10,10 @@ import com.whensunset.sticker.DecorationElement;
  */
 
 public class TextElement extends DecorationElement {
-  public @Nullable String mStickerFilePath; // 普通贴纸的源文件路径
   
   private EditText mEditText;
   public TextElement(float originWidth, float originHeight) {
-    super(ElementType.NORMAL_STICKER, originWidth, originHeight);
+    super(originWidth, originHeight);
   }
   
   @Override

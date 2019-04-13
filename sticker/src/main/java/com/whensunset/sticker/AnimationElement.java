@@ -17,16 +17,17 @@ import android.widget.AbsoluteLayout;
  */
 
 public abstract class AnimationElement extends WsElement {
-  private static final String DEBUG_TAG = "heshixi:AElement";
+  private static final String TAG = "heshixi:AElement";
   private static final long DEFAULT_ANIMATION_DURATION = 300; // 默认动画时间为 300 毫秒
   protected TransformParam mBeforeTransformParam = new AnimationElement.TransformParam();
+  protected boolean mIsInAnimation; // 是否处于动画中
   
-  public AnimationElement(int elementType, float originWidth, float originHeight) {
-    super(elementType, originWidth, originHeight);
+  public AnimationElement(float originWidth, float originHeight) {
+    super(originWidth, originHeight);
   }
   
-  public AnimationElement(int elementType) {
-    super(elementType);
+  public AnimationElement() {
+    super();
   }
   
   public void startElementAnimation(TransformParam to) {
@@ -100,7 +101,7 @@ public abstract class AnimationElement extends WsElement {
       long milTime,
       View animationView) {
     if (to == null) {
-      Log.e(DEBUG_TAG, "startElementAnimation error to is null");
+      Log.e(TAG, "startElementAnimation error to is null");
       return;
     }
     limitTransformParam(to);
@@ -136,7 +137,8 @@ public abstract class AnimationElement extends WsElement {
       }
     });
     elementAnimator.start();
-    Log.i(DEBUG_TAG, "startElementAnimation to:" + to);
+    mIsInAnimation = true;
+    Log.i(TAG, "startElementAnimation to:" + to);
   }
   
   /**
@@ -156,7 +158,7 @@ public abstract class AnimationElement extends WsElement {
       ElementContainerView.Consumer<ValueAnimator> updateWidthHeight) {
     
     if (to == null) {
-      Log.e(DEBUG_TAG, "startViewAnimationByChangeViewParam error to is null");
+      Log.e(TAG, "startViewAnimationByChangeViewParam error to is null");
       return;
     }
     
@@ -201,7 +203,8 @@ public abstract class AnimationElement extends WsElement {
       }
     });
     elementAnimator.start();
-    Log.i(DEBUG_TAG, "startViewAnimationByChangeViewParam to:" + to);
+    mIsInAnimation = true;
+    Log.i(TAG, "startViewAnimationByChangeViewParam to:" + to);
   }
   
   public class CubicEaseOutInterpolator implements TimeInterpolator {
@@ -223,6 +226,7 @@ public abstract class AnimationElement extends WsElement {
       mMoveX = to.mMoveX;
       mMoveY = to.mMoveY;
     }
+    mIsInAnimation = false;
   }
   
   /**
@@ -241,6 +245,10 @@ public abstract class AnimationElement extends WsElement {
     to.mMoveY = (to.mMoveY > getBottomTopLimitLength() ? getBottomTopLimitLength() : to.mMoveY);
     to.mScale = (to.mScale < MIN_SCALE_FACTOR ? MIN_SCALE_FACTOR : to.mScale);
     to.mScale = (to.mScale > MAX_SCALE_FACTOR ? MAX_SCALE_FACTOR : to.mScale);
+  }
+  
+  public boolean isInAnimation() {
+    return mIsInAnimation;
   }
   
   public static class TransformParam {

@@ -16,7 +16,7 @@ public class MulInputElement extends DecorationElement {
   private ViewGroup mContainerView;
   
   public MulInputElement() {
-    super(ElementType.NORMAL_STICKER);
+    super();
     mIsRealUpdateShowingViewParams = true;
     mIsResponseSelectedClick = true;
   }
