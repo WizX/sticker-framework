@@ -78,7 +78,7 @@ public class TrashElementContainerView extends RuleLineElementContainerView {
     ImageView trashView = new ImageView(getContext());
     LayoutParams layoutParams = new LayoutParams((int) mTrashRect.width(), (int) mTrashRect.height(), (int) mTrashRect.left, (int) mTrashRect.top);
     trashView.setLayoutParams(layoutParams);
-    trashView.setImageResource(R.drawable.trash);
+    trashView.setImageResource(R.drawable.default_decoration_trash);
     int padding = (int) (mTrashRect.width() * 0.25);
     trashView.setPadding(padding, padding ,padding ,padding);
     return trashView;

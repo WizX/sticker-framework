@@ -8,8 +8,8 @@ import android.widget.Button;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.whensunset.sticker.AnimationElement;
-import com.whensunset.sticker.DecorationView;
 import com.whensunset.sticker.RuleLineElementContainerView;
+import com.whensunset.sticker.Sticker;
 
 public class MainActivity extends Activity {
   private RuleLineElementContainerView mElementContainerView;
@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.activity_main);
     Fresco.initialize(this);
-    DecorationView.initDecorationView(getResources(), getApplicationContext(), R.drawable.edit_btn_delete, R.drawable.edit_btn_scale);
+    Sticker.initialize(this);
     mElementContainerView = findViewById(R.id.element_container_view);
     mElementContainerView.setNeedAutoUnSelect(false);
     
@@ -34,9 +34,6 @@ public class MainActivity extends Activity {
     
     Button addMulputElement = findViewById(R.id.add_mul_put_element);
     addMulputElement.setOnClickListener(v -> {
-//      MulInputElement normalStickerElementDrawer = new MulInputElement();
-//      mElementContainerView.unSelectElement();
-//      mElementContainerView.addSelectAndUpdateElement(normalStickerElementDrawer);
       StaticStickerElement staticStickerElement = StaticStickerElement.getStaticStickerElementByUri(
           500, 500, "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2335883016,884179302&fm=200&gp=0.jpg");
       mElementContainerView.unSelectElement();
