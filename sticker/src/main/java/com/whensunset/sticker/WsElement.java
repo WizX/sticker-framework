@@ -161,6 +161,7 @@ public abstract class WsElement implements Cloneable {
   public void select() {
     mZIndex = 0;
     mIsSelected = true;
+    mElementShowingView.bringToFront();
   }
   
   /**
@@ -211,7 +212,6 @@ public abstract class WsElement implements Cloneable {
       mElementShowingView.setTranslationY(getRealY(mMoveY, mElementShowingView));
     }
     mElementShowingView.setRotation(mRotate);
-    mElementShowingView.bringToFront();
   }
   
   /**

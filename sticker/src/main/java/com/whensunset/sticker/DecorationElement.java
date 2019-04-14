@@ -3,6 +3,7 @@ package com.whensunset.sticker;
 import android.animation.ValueAnimator;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +51,21 @@ public abstract class DecorationElement extends AnimationElement {
     mShowingViewParams.rightMargin = REDUNDANT_AREA_LEFT_RIGHT + ELEMENT_SCALE_ROTATE_ICON_WIDTH / 2;
     mShowingViewParams.bottomMargin = REDUNDANT_AREA_TOP_BOTTOM + ELEMENT_SCALE_ROTATE_ICON_WIDTH / 2;
     
-    mDecorationView = new DecorationView(mElementContainerView.getContext());
-    mDecorationView.setDecorationElement(this);
+    mDecorationView = initDecorationView();
+    mElementContainerView.addView(mDecorationView);
+  }
+  
+  /**
+   * 初始化边框装饰 view，子类可以实现自己的样式
+   */
+  @NonNull
+  protected DecorationView initDecorationView() {
+    DecorationView decorationView = new DecorationView(mElementContainerView.getContext());
+    decorationView.setDecorationElement(this);
     AbsoluteLayout.LayoutParams decorationViewLayoutParams =
         new AbsoluteLayout.LayoutParams(0, 0, 0, 0);
-    mDecorationView.setLayoutParams(decorationViewLayoutParams);
-    mElementContainerView.addView(mDecorationView);
+    decorationView.setLayoutParams(decorationViewLayoutParams);
+    return decorationView;
   }
   
   @Override
@@ -74,26 +84,40 @@ public abstract class DecorationElement extends AnimationElement {
   
   @Override
   public void startElementAnimation(TransformParam to, Runnable endRun, long milTime) {
+    startElementAnimation(to, endRun, milTime, true);
+  }
+  
+  public void startElementAnimation(TransformParam to, Runnable endRun, long milTime, boolean isEndShowDecoration) {
     super.startElementAnimation(to, endRun, milTime);
     mDecorationView.setVisibility(View.GONE);
-    startDecorationViewAnimation(to, milTime);
+    startDecorationViewAnimation(to, milTime, isEndShowDecoration);
   }
   
   @Override
   public void restoreToBeforeAnimation(Runnable endRun, long milTime) {
-    super.restoreToBeforeAnimation(endRun, milTime);
-    mDecorationView.setVisibility(View.GONE);
-    startDecorationViewAnimation(mBeforeTransformParam, milTime);
+    restoreToBeforeAnimation(endRun, milTime, true);
   }
   
-  private void startDecorationViewAnimation(TransformParam to, long milTime) {
+  public void restoreToBeforeAnimation(Runnable endRun, long milTime, boolean isEndShowDecoration) {
+    super.restoreToBeforeAnimation(endRun, milTime);
+    mDecorationView.setVisibility(View.GONE);
+    startDecorationViewAnimation(mBeforeTransformParam, milTime, isEndShowDecoration);
+  }
+  
+  private void startDecorationViewAnimation(TransformParam to, long milTime, boolean isEndShowDecoration) {
     ElementContainerView.Consumer<ValueAnimator> updateWidthHeight = animator -> {
       ViewGroup.LayoutParams layoutParams = mDecorationView.getLayoutParams();
       layoutParams.width = (int) ((mShowingViewParams.width * (float) animator.getAnimatedValue()) + mShowingViewParams.leftMargin + mShowingViewParams.rightMargin);
       layoutParams.height = (int) ((mShowingViewParams.height * (float) animator.getAnimatedValue()) + mShowingViewParams.topMargin + mShowingViewParams.bottomMargin);
       mDecorationView.setLayoutParams(layoutParams);
     };
-    startViewAnimationByChangeViewParam(to, () -> mDecorationView.setVisibility(View.VISIBLE), milTime, mDecorationView, updateWidthHeight);
+    startViewAnimationByChangeViewParam(to, () -> {
+      if (isEndShowDecoration) {
+        mDecorationView.setVisibility(View.VISIBLE);
+      } else {
+        mDecorationView.setVisibility(View.GONE);
+      }
+    }, milTime, mDecorationView, updateWidthHeight);
   }
   
   @Override

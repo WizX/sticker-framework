@@ -57,7 +57,7 @@ public class DecorationView extends View {
     sIsInit = true;
   }
   
-  private DecorationElement mDecorationElement;
+  protected DecorationElement mDecorationElement;
   
   public DecorationView(Context context) {
     super(context);

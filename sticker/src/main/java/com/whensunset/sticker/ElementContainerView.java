@@ -1,10 +1,12 @@
 package com.whensunset.sticker;
 
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -44,6 +46,8 @@ public class ElementContainerView extends AbsoluteLayout {
   protected LinkedList<WsElement> mElementList = new LinkedList<>();
   protected Set<ElementActionListener> mElementActionListenerSet = new HashSet<>(); // 监听列表
   protected MotionEvent[] mUpDownMotionEvent = new MotionEvent[2]; // 储存当前 up down 事件，以便在需要的时候进行事件分发
+  protected Vibrator mVibrator;
+  
   
   {
     init();
@@ -82,6 +86,7 @@ public class ElementContainerView extends AbsoluteLayout {
     });
     
     addDetector();
+    mVibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
   }
   
   /**
@@ -119,7 +124,7 @@ public class ElementContainerView extends AbsoluteLayout {
         if (mIsInDoubleFinger) {
           return false;
         }
-       
+        
         float[] distance = new float[]{distanceX, distanceY};
         boolean result = scrollSelectTapOtherAction(e2, distance);
         if (result) {
@@ -423,7 +428,8 @@ public class ElementContainerView extends AbsoluteLayout {
   
   /**
    * 滑动已经选中的元素，如果子类中有操作的话可以给它，优先级最高
-   * @param event 当前的触摸事件
+   *
+   * @param event    当前的触摸事件
    * @param distance size 为 2，里面分别为 x 轴的 delta 位移，和 y 轴的 delta 位移
    * @return
    */

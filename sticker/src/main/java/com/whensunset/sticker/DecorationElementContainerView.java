@@ -14,8 +14,6 @@ import android.view.MotionEvent;
 
 public class DecorationElementContainerView extends ElementContainerView {
   private static final String TAG = "heshixi:DECV";
-  private static final float ON_FLING_VELOCITY_X_THRESHOLD = 200;
-  private static final float ON_FLING_VELOCITY_Y_THRESHOLD = 200;
   
   protected DecorationActionMode mDecorationActionMode;
   protected boolean mIsRunOnFlingAnimation = true;
@@ -68,6 +66,11 @@ public class DecorationElementContainerView extends ElementContainerView {
     }
     
     DecorationElement element = (DecorationElement) mSelectedElement;
+    if (element == null) {
+      return false;
+    }
+  
+    element = (DecorationElement) findElementByPosition(e2.getX(), e2.getY());
     if (element == null) {
       return false;
     }

@@ -1,4 +1,4 @@
-package com.whensunset.test;
+package com.whensunset.sticker;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,20 +13,21 @@ import android.view.View;
 
 /**
  * Created by whensunset on 2019/4/14.
+ * 规制线条 view
  */
 
 public class RuleLineView extends View {
   private static final String TAG = "heshixi:RuleLineView";
   private static final float LINE_WIDTH = 6; // 线的宽度，单位为 px
   private static Paint sLinePaint = new Paint();
-  private RuleLine[] mRuleLines;
-  
   static {
     sLinePaint.setColor(0XFF33B5E5);
     sLinePaint.setStyle(Paint.Style.STROKE);
     sLinePaint.setAntiAlias(true);
     sLinePaint.setStrokeWidth(LINE_WIDTH);
   }
+  
+  protected RuleLine[] mRuleLines;
   
   public RuleLineView(Context context) {
     super(context);
@@ -70,7 +71,7 @@ public class RuleLineView extends View {
           sLinePaint);
     }
   }
- 
+  
   public static class RuleLine {
     public PointF mStartPoint;
     public PointF mEndPoint;

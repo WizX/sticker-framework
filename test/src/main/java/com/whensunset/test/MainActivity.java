@@ -9,9 +9,10 @@ import android.widget.Button;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.whensunset.sticker.AnimationElement;
 import com.whensunset.sticker.DecorationView;
+import com.whensunset.sticker.RuleLineElementContainerView;
 
-public class MainActivity extends Activity{
-  private MyTikTokElementContainerView mElementContainerView;
+public class MainActivity extends Activity {
+  private RuleLineElementContainerView mElementContainerView;
   
   @SuppressLint("ShowToast")
   @Override
@@ -23,14 +24,14 @@ public class MainActivity extends Activity{
     DecorationView.initDecorationView(getResources(), getApplicationContext(), R.drawable.edit_btn_delete, R.drawable.edit_btn_scale);
     mElementContainerView = findViewById(R.id.element_container_view);
     mElementContainerView.setNeedAutoUnSelect(false);
-  
+    
     Button addTestElement = findViewById(R.id.add_test_element);
     addTestElement.setOnClickListener(v -> {
       TestElement testElementDrawer = new TestElement(500, 500);
       mElementContainerView.unSelectElement();
       mElementContainerView.addSelectAndUpdateElement(testElementDrawer);
     });
-
+    
     Button addMulputElement = findViewById(R.id.add_mul_put_element);
     addMulputElement.setOnClickListener(v -> {
 //      MulInputElement normalStickerElementDrawer = new MulInputElement();
