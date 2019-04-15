@@ -22,7 +22,7 @@ import android.widget.ImageView;
 public class TrashElementContainerView extends RuleLineElementContainerView {
   private static final String TAG = "heshixi:MTTECV";
   private static final float TRASH_RECT_WIDTH_PERCENT = 0.13f;// 垃圾桶区域长宽占 view 的宽的百分比
-  private static final float TRASH_RECT_MARGIN_TOP = 0.05f;// 垃圾桶区域距离 view 顶部距离占 view 长的百分比
+  private static final float TRASH_RECT_MARGIN_TOP = 0.03f;// 垃圾桶区域距离 view 顶部距离占 view 长的百分比
   private static final long TRASH_VIEW_ANIMATION_DURATION = 100;// 垃圾桶 view 显示和消失的动画的时间
   private static final long ELEMENT_ANIMATION_DURATION = 300;// 元素做动画的时间
   protected static final long VIBRATOR_DURATION_IN_TRASH = 40; // 进入垃圾桶时的震动的时长
